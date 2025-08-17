@@ -12,12 +12,46 @@ using ll = long long;
 int n, k;
 vector<int> a;
 
+bool works(ll x) {
+    ll filled = 0;
+    ll last = 0;
+    for(int i = 0; i < n; i++) {
+        if(a[i] + last < x) {
+            last += a[i];
+        }
+        else if(a[i] >= x) {
+            filled++;
+        }
+        else {
+            filled++;
+            last = (a[i]+last)%x;
+        }
+        if(filled >= k) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void solve() {
     cin >> k >> n;
     a.resize(n);
     for(auto &A : a) {
         cin >> A;
     }
+
+    ll l = 0;
+    ll r = (ll)*max_element(all(a)) * n;
+    while(l+1 < r) {
+        ll mid = l+(r-l)/2;
+        if(works(mid)) {
+            l = mid;
+        }
+        else {
+            r = mid;
+        }
+    }
+    ans(l);
 }
 
 int main() {
